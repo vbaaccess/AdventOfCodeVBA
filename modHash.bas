@@ -36,6 +36,29 @@ Public Function MD5(ByVal sText As String) As String
     Next i
 End Function
 
+' Funkcja obliczająca hash SHA-1 dla ciągu tekstowego
+Public Function SHA1(ByVal sText As String) As String
+    Dim enc As Object
+    Dim bytes() As Byte
+    Dim hash() As Byte
+    Dim i As Long
+    
+    ' Tworzymy provider MD5 z .NET
+    Set enc = CreateObject("System.Security.Cryptography.SHA1CryptoServiceProvider")
+    
+    ' Zamiana stringa na tablicę bajtów (ANSI / UTF-8 zależnie od potrzeby)
+    bytes = StrConv(sText, vbFromUnicode)
+    
+    ' Obliczenie hash
+    hash = enc.ComputeHash_2((bytes))
+    
+    ' Konwersja bajtów na hex
+    SHA1 = ""
+    For i = 0 To UBound(hash)
+        SHA1 = SHA1 & LCase(Right$("0" & Hex$(hash(i)), 2))
+    Next i
+End Function
+
 Public Sub Md5Finder()
     Dim iLicznik&, iStart&, iMax&, iTotalSteps&
     Dim sKlucz$, sPrefix$, sMD5$
